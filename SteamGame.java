@@ -4,11 +4,11 @@ public class SteamGame
    private int appid;
    private int playtime;
    
-   public SteamGame(int id, int play)
+   public SteamGame(int id, int play, String title)
    {
       appid = id;
       playtime = play;
-      name = "";
+      name = title;
    }
    
    public String getName()

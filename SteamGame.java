@@ -1,8 +1,14 @@
 public class SteamGame
 {
    private String name;
+   //The title of the game
+   
    private int appid;
+   //Number representing the game in [Steam's database?]
+   
    private int playtime;
+   //The number of minutes the person in question has spent
+   //playing the game
    
    public SteamGame(int id, int play, String title)
    {

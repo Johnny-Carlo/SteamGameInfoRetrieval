@@ -3,6 +3,10 @@ import java.util.*;
 import java.net.*;
 
 import org.json.*;
+// org.json does not come standard in the Java library
+// It can be found here as a zip file:
+// http://www.java2s.com/Code/Jar/j/Downloadjavajsonjar.htm
+// Last checked March 15, 2016
 
 /*
 
@@ -27,7 +31,7 @@ public class SteamGameInfoRetrieval
       InputStream response = connection.getInputStream();
       String out = convertStreamToString(response);
       response.close();
-      //System.out.print(out);
+      // System.out.print(out);
       writeOut(out, "json.txt");
       
       parseJSONToList(out);
@@ -35,8 +39,7 @@ public class SteamGameInfoRetrieval
       String last = getEverything();
       writeOut(last, args[0]);
    }
-   /**/
-   
+      
    public static String prepareURL(String id, String key)
    {
       String url = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/";
@@ -111,7 +114,7 @@ public class SteamGameInfoRetrieval
    }
    
    public static void parseJSONToList(String in) throws JSONException
-   {
+   {//Parse the JSON file into a list of SteamGame objects
       JSONObject obj = new JSONObject(in);
       
       JSONArray arr = obj.getJSONObject("response").getJSONArray("games");
@@ -131,7 +134,7 @@ public class SteamGameInfoRetrieval
    }
 
    public static String getEverything()
-   {
+   {//convert all the information accumulated into a single string
       String give = "";
       for(int i = 0; i < gameList.size(); i++)
       {

@@ -19,8 +19,6 @@ import org.json.*;
 
 public class SteamGameInfoRetrieval
 {
-
-   public static int gameCount;
    public static List<SteamGame> gameList = new ArrayList<SteamGame>();
    
    public static void main(String [] args) throws IOException, JSONException
@@ -35,7 +33,7 @@ public class SteamGameInfoRetrieval
       writeOut(out, "json.txt");
       
       parseJSONToList(out);
-      // takeNames();
+      sortList();
       String last = getEverything();
       writeOut(last, args[0]);
    }
@@ -44,19 +42,19 @@ public class SteamGameInfoRetrieval
    {
       String url = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/";
       // URL of the desired service
-
+   
       String param1 = key;
       // Our (current) Key for Steam
-
+   
       String param2 = id;
       // The ID of the subject in question.
-
+   
       String param3 = "json";
       // The desired format of the response.
-
+   
       // URL format for the information needed:
       // http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=XXXXXXXXXXXXXXXXX&steamid=76561197960434622&format=json
-
+   
       String query = "key=" + param1 
          + "&steamid=" + param2 
          + "&format=" + param3 
@@ -64,7 +62,7 @@ public class SteamGameInfoRetrieval
       // The customized end of the URL
       
       System.out.print(url + "?" + query + "\n");
-
+   
       String complete_url = url + "?" + query;
       // The completed URL
       return complete_url;
@@ -118,19 +116,46 @@ public class SteamGameInfoRetrieval
       JSONObject obj = new JSONObject(in);
       
       JSONArray arr = obj.getJSONObject("response").getJSONArray("games");
-
+   
       for(int i = 0; i < arr.length(); i++)
       {
          SteamGame thing = new SteamGame( 
-            arr.getJSONObject(i).getInt( "appid" ), 
-            arr.getJSONObject(i).getInt( "playtime_forever" ),
-            arr.getJSONObject(i).getString( "name" ) 
+            arr.getJSONObject(i).getInt(    "appid"            ), 
+            arr.getJSONObject(i).getInt(    "playtime_forever" ),
+            arr.getJSONObject(i).getString( "name"             ) 
             );
             // construct a new steam game object...
             
          gameList.add(thing);
          // ...and add it to the list
       }
+   }
+   
+   public static void sortList()
+   {
+      String smallest;
+      int place;
+      for(int i = 0; i < gameList.size(); i++)
+      {
+         smallest = gameList.get(i).getName();
+         place = i;
+         for(int j = i; j < gameList.size(); j++)
+         {
+            if(gameList.get(j).getName().compareTo(smallest) < 0)
+            {
+               smallest = gameList.get(j).getName();
+               place = j;
+            }
+         }
+         swap(i, place);
+      }
+   }
+   
+   public static void swap(int first, int place)
+   {
+      SteamGame temp = gameList.get(first);
+      gameList.set(first, gameList.get(place));
+      gameList.set(place, temp);
    }
 
    public static String getEverything()

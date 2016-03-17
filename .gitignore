@@ -7,5 +7,4 @@
 *.ear
 
 # Tester Text Files #
-out.txt
-json.txt
+*.txt

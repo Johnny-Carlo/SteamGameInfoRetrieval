@@ -1,3 +1,10 @@
+/*
+ 
+ *Tim Haskins
+ *March 25, 2016
+
+ */
+
 import java.io.*;
 import java.util.*;
 import java.net.*;
@@ -9,7 +16,7 @@ import org.json.*;
 // Last checked March 15, 2016
 
 /*
-
+ 
  *Expected arguments: 
  *args[0]: the name of the output file 
  *args[1]: The ID of the person in question
@@ -97,7 +104,7 @@ public class SteamGameInfoRetrieval
    */
    
    public static void writeOut(String in, String file)
-   {// write the String to a text file in case a review of the info is in order
+   {//write the String to a text file in case a review of the info is in order
       File outFile = new File(file);
       try
       {
@@ -132,9 +139,19 @@ public class SteamGameInfoRetrieval
    }
    
    public static void sortList()
-   {
+   {//Sort the list alphabetically
       String smallest;
       int place;
+      /*Selection sort
+      
+       *Not the most efficient, but the average Steam user has about 80 games
+          with outliers going up to about 400 or 500, so O(n^2) probably won't
+          hurt much
+         
+       *Tested with an account with 592 games. The difference between that 
+          and an account with 145 games appears to be about half a second.
+      
+      */
       for(int i = 0; i < gameList.size(); i++)
       {
          smallest = gameList.get(i).getName();
@@ -153,6 +170,7 @@ public class SteamGameInfoRetrieval
    
    public static void swap(int first, int place)
    {
+      if(first == place){return;}
       SteamGame temp = gameList.get(first);
       gameList.set(first, gameList.get(place));
       gameList.set(place, temp);
@@ -160,10 +178,11 @@ public class SteamGameInfoRetrieval
 
    public static String getEverything()
    {//convert all the information accumulated into a single string
-      String give = "";
+      String give = "Games: " + gameList.size() + "\n";
+      //game list size may not match what's found on steamcommunity
       for(int i = 0; i < gameList.size(); i++)
       {
-         give += gameList.get(i).getName()     + " : " 
+         give += gameList.get(i).getName()     + " ... " 
                + gameList.get(i).getPlaytime() + " minutes\n";
       }
       return give;

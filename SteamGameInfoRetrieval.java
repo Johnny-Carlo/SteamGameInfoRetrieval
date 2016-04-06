@@ -36,11 +36,11 @@ public class SteamGameInfoRetrieval
       InputStream response = connection.getInputStream();
       String out = convertStreamToString(response);
       response.close();
-      // System.out.print(out);
+      
       writeOut(out, "json.txt");
       
       parseJSONToList(out);
-      sortList();
+      
       String last = getEverything();
       writeOut(last, args[0]);
    }
@@ -132,48 +132,30 @@ public class SteamGameInfoRetrieval
             arr.getJSONObject(i).getString( "name"             ) 
             );
             // construct a new steam game object...
-            
-         gameList.add(thing);
-         // ...and add it to the list
-      }
-   }
-   
-   public static void sortList()
-   {//Sort the list alphabetically
-      String smallest;
-      int place;
-      /*Selection sort
-      
-       *Not the most efficient, but the average Steam user has about 80 games
-          with outliers going up to about 400 or 500, so O(n^2) probably won't
-          hurt much
+         /*
          
-       *Tested with an account with 592 games. The difference between that 
-          and an account with 145 games appears to be about half a second.
-      
-      */
-      for(int i = 0; i < gameList.size(); i++)
-      {
-         smallest = gameList.get(i).getName();
-         place = i;
-         for(int j = i; j < gameList.size(); j++)
+          *Insertion Sort
+          
+          *The average steam account has around 179 games, with outliers going
+            up to 500, maybe 750. All cases are still within acceptable 
+            levels for this kind of sorting algorithm.
+          
+          */
+         String plus = thing.getName();
+         for(int j = 0; j <= gameList.size(); j++)
          {
-            if(gameList.get(j).getName().compareTo(smallest) < 0)
+            if(j == gameList.size())
             {
-               smallest = gameList.get(j).getName();
-               place = j;
+               gameList.add(thing);
+               break;
             }
-         }
-         swap(i, place);
+            else if(gameList.get(j).getName().compareToIgnoreCase(plus) > 0)
+            {
+               gameList.add(j, thing);
+               break;
+            }
+         }// ...and add it to the list   
       }
-   }
-   
-   public static void swap(int first, int place)
-   {
-      if(first == place){return;}
-      SteamGame temp = gameList.get(first);
-      gameList.set(first, gameList.get(place));
-      gameList.set(place, temp);
    }
 
    public static String getEverything()
